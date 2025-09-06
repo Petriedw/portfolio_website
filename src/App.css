@@ -23,7 +23,7 @@ html, body, #root { margin: 0; height: 100%; }
 }
 
 body{
-  min-height: 100svh;             /* makes footer sit at bottom nicely */
+  min-height: 100svh;
   display: flex; flex-direction: column;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
   color: var(--cream);
@@ -35,7 +35,7 @@ main{ flex: 1 0 auto; }
 /* ---------- Sticky Header ---------- */
 .site-header{
   position: sticky; top: 0; z-index: 100;
-  background: #7d8570cc;               /* olive @ 80% */
+  background: #7d8570cc;
   border-bottom: 1px solid var(--dark-20);
   backdrop-filter: blur(6px);
 }
@@ -48,7 +48,6 @@ main{ flex: 1 0 auto; }
   grid-template-columns: 1fr auto;
   align-items: center;
 }
-/* Brand always left */
 .site-header__brand {
   justify-self: start;
   font-family: "Playfair Display", Georgia, serif;
@@ -58,8 +57,6 @@ main{ flex: 1 0 auto; }
   font-size: clamp(14px, 1.4vw, 18px);
   text-decoration: none;
 }
-
-/* Contact button always right */
 .site-header__contact-btn {
   justify-self: end;
   padding: 8px 16px;
@@ -71,17 +68,12 @@ main{ flex: 1 0 auto; }
   box-shadow: 0 6px 20px var(--dark-40);
   transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
 }
-
-/* Hover animation */
 .site-header__contact-btn:hover {
   background: var(--olive);
   color: var(--dark);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px var(--dark-60);
 }
-
-
-/* Burger (mobile) */
 .site-header__burger{
   display:none; width:38px; height:30px; background:transparent; border:0; position:relative;
 }
@@ -105,8 +97,6 @@ main{ flex: 1 0 auto; }
   grid-template-columns: minmax(280px, 1.15fr) minmax(260px, .95fr);
   gap: clamp(24px, 6vw, 72px);
 }
-
-/* Left column */
 .hero__left{ align-self: start; padding-top: clamp(8px, 3vh, 36px); }
 .hero__name{
   margin: 0 0 .3em 0;
@@ -141,8 +131,6 @@ main{ flex: 1 0 auto; }
   font-size: clamp(13px, 1.15vw, 16px);
   color: var(--cream);
 }
-
-/* Social buttons */
 .hero__dots{ display:flex; gap: clamp(10px, 1.4vw, 16px); }
 .hero__dots .social{
   display: inline-flex;
@@ -172,9 +160,8 @@ main{ flex: 1 0 auto; }
   pointer-events: none;
 }
 
-/* ---------- Right column: photo stack (FIXED Z-INDEX) ---------- */
+/* ---------- Right column: photo stack ---------- */
 .hero__right{ display:flex; justify-content:center; }
-
 .photo-stack{
   position: relative;
   width: min(clamp(320px, 38vw, 560px), 90vw);
@@ -185,28 +172,28 @@ main{ flex: 1 0 auto; }
   content: ""; position: absolute; inset: 0;
 }
 .photo-stack::before{
-  z-index: 0;                       /* bottom */
+  z-index: 0;
   background: var(--cream);
   transform: translate(var(--cream-offset-x), var(--cream-offset-y));
 }
 .photo-stack::after{
-  z-index: 1;                       /* middle (frame) */
+  z-index: 1;
   background: var(--dark);
   inset: var(--frame-gap);
   box-shadow: 0 12px 32px var(--dark-40);
 }
 .photo-stack__img{
   position: absolute;
-  z-index: 2;                       /* top (above frame) */
+  z-index: 2;
   inset: calc(var(--frame-gap) + var(--img-pad));
   width: calc(100% - (var(--frame-gap) + var(--img-pad)) * 2);
   height: calc(100% - (var(--frame-gap) + var(--img-pad)) * 2);
   object-fit: cover;
   display: block;
-  background: var(--dark);          /* fallback color if image missing */
+  background: var(--dark);
 }
 
-/* ---------- Footer (FIXED) ---------- */
+/* ---------- Footer ---------- */
 .footer{
   flex-shrink: 0;
   border-top:1px solid var(--dark-20);
@@ -248,3 +235,43 @@ main{ flex: 1 0 auto; }
   }
   .site-header__nav.is-open{ opacity:1; transform: translateY(0); pointer-events:auto; }
 }
+
+/* ---------- Mobile refinements for photo stack ---------- */
+@media (max-width: 768px){
+  .hero{
+    min-height: auto;
+    padding: clamp(16px, 6vh, 48px) 0;
+  }
+  .hero__inner{ align-items: start; }
+  .hero__right{ order: -1; }
+  .photo-stack{
+    width: min(540px, 94vw);
+    aspect-ratio: 3 / 4;
+  }
+  :root{
+    --frame-gap: clamp(10px, 2.5vw, 16px);
+    --img-pad: clamp(16px, 4vw, 28px);
+    --cream-offset-x: clamp(8px, 2.2vw, 14px);
+    --cream-offset-y: clamp(10px, 3vh, 18px);
+  }
+  .photo-stack::after{ box-shadow: 0 8px 22px var(--dark-40); }
+  .hero__name{ white-space: normal; }
+  .photo-stack__img{ object-position: center top; border-radius: 8px; }
+}
+@media (max-width: 420px){
+  :root{
+    --frame-gap: 8px;
+    --img-pad: 14px;
+    --cream-offset-x: 8px;
+    --cream-offset-y: 12px;
+  }
+  .photo-stack{ aspect-ratio: 1 / 1.2; }
+  .hero__stats{
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .hero__stat{ min-width: auto; }
+  .hero__divider{ display: none; }
+}
+
