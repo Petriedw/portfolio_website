@@ -27,9 +27,8 @@ export default function Hero() {
           </div>
 
           <p className="hero__bio">
-            I craft resilient backends and refined interfaces. My work blends engineering
-            discipline with product sense: clean architectures, performance-first code,
-            and interfaces that feel effortless.
+            Hi, I’m Petrie. I’m a software developer who thrives on problem-solving and high-pressure environments. 
+            I see myself as a bridge between people and technology - translating ideas into clean, efficient code that makes a real impact.
           </p>
 
           <div className="hero__dots">
