@@ -11,12 +11,12 @@ export default function Hero() {
 
           <div className="hero__stats" role="group" aria-label="Key stats">
             <div className="hero__stat">
-              <div className="hero__stat-num">2+</div>
+              <div className="hero__stat-num">3+</div>
               <div className="hero__stat-label">Experiences</div>
             </div>
             <div className="hero__divider" />
             <div className="hero__stat">
-              <div className="hero__stat-num">3+</div>
+              <div className="hero__stat-num">4+</div>
               <div className="hero__stat-label">Projects</div>
             </div>
             <div className="hero__divider" />
