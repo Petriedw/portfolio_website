@@ -6,7 +6,7 @@ export default function Hero() {
     <section id="top" className="hero">
       <div className="hero__inner">
         <div className="hero__left">
-          <h1 className="hero__name">PETRIE DE WIT</h1>
+          <h1 className="hero__name">PETRIE DE&nbsp;WIT</h1>
           <div className="hero__subtitle">Software Developer</div>
 
           <div className="hero__stats" role="group" aria-label="Key stats">
