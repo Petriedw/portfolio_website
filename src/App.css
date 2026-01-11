@@ -56,6 +56,11 @@
   100% { background-position: 1000px 0; }
 }
 
+@keyframes shimmer-reactive {
+  0% { background-position: var(--mouse-x, 0%) var(--mouse-y, 50%); }
+  100% { background-position: calc(var(--mouse-x, 0%) + 200%) var(--mouse-y, 50%); }
+}
+
 @keyframes glow-pulse {
   0%, 100% { 
     box-shadow: 0 0 30px var(--gold-20), 
@@ -90,6 +95,27 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Enable hardware acceleration for smoother animations */
+@keyframes float-gpu {
+  0%, 100% { 
+    transform: translate3d(0, 0px, 0) rotate(0deg);
+    will-change: transform;
+  }
+  50% { 
+    transform: translate3d(0, -20px, 0) rotate(2deg);
+  }
+}
+
+@keyframes float-reverse-gpu {
+  0%, 100% { 
+    transform: translate3d(0, 0px, 0) rotate(0deg);
+    will-change: transform;
+  }
+  50% { 
+    transform: translate3d(0, 20px, 0) rotate(-2deg);
+  }
+}
+
 /* ---------- Base Styles ---------- */
 * { 
   box-sizing: border-box; 
@@ -100,6 +126,43 @@
 html, body, #root { 
   margin: 0; 
   height: 100%; 
+}
+
+/* Performance optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove any default browser styling that could cause lines */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+input, textarea, select, button {
+  border: none;
+  outline: none;
+}
+
+/* Force GPU acceleration on interactive elements */
+.site-header,
+.site-header__contact-btn,
+.hero__stats,
+.hero__dots .social,
+.photo-stack,
+.photo-stack::before,
+.photo-stack::after,
+.photo-stack__img {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 body {
@@ -117,15 +180,17 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  transform: translateZ(0); /* Force GPU acceleration */
 }
 
-/* Subtle texture overlay */
+/* Subtle texture overlay - REMOVED SCANLINES */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(250, 248, 240, 0.02) 2px, rgba(250, 248, 240, 0.02) 4px);
+  background: 
+    radial-gradient(ellipse at top, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(90, 107, 79, 0.03) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
 }
@@ -155,7 +220,8 @@ html {
   background: var(--dark-80);
   border-bottom: 1px solid var(--olive-20);
   backdrop-filter: blur(20px) saturate(180%);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: background, border-color, box-shadow;
 }
 
 .site-header.is-scrolled {
@@ -183,13 +249,13 @@ html {
   font-size: clamp(18px, 2vw, 24px);
   text-decoration: none;
   background: linear-gradient(135deg, var(--cream) 0%, var(--gold-light) 50%, var(--cream) 100%);
-  background-size: 200% auto;
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   position: relative;
-  transition: all 0.4s ease;
-  animation: shimmer 8s linear infinite;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: letter-spacing, filter, background-position;
 }
 
 .site-header__brand:hover {
@@ -211,8 +277,9 @@ html {
   text-transform: uppercase;
   box-shadow: 0 8px 30px var(--gold-30),
               inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
   overflow: hidden;
+  will-change: transform, box-shadow;
 }
 
 .site-header__contact-btn::before {
@@ -221,7 +288,7 @@ html {
   inset: 0;
   background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.25s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .site-header__contact-btn::after {
@@ -234,7 +301,7 @@ html {
   background: rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
+  transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1), height 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .site-header__contact-btn:hover::before {
@@ -278,9 +345,10 @@ html {
   border-radius: 50%;
   top: -200px;
   right: -100px;
-  animation: float 12s ease-in-out infinite;
+  animation: float-gpu 12s ease-in-out infinite;
   pointer-events: none;
   filter: blur(60px);
+  will-change: transform;
 }
 
 .hero::after {
@@ -292,9 +360,10 @@ html {
   border-radius: 50%;
   bottom: -150px;
   left: -100px;
-  animation: float-reverse 15s ease-in-out infinite;
+  animation: float-reverse-gpu 15s ease-in-out infinite;
   pointer-events: none;
   filter: blur(60px);
+  will-change: transform;
 }
 
 .hero__inner {
@@ -324,13 +393,18 @@ html {
   font-size: clamp(48px, 8vw, 96px);
   line-height: 1.1;
   background: linear-gradient(135deg, var(--cream) 0%, var(--gold-light) 40%, var(--cream) 80%);
-  background-size: 200% auto;
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 6s linear infinite;
   position: relative;
   filter: drop-shadow(0 4px 20px var(--gold-20));
+  will-change: background-position, filter;
+}
+
+/* Keep "DE WIT" together on same line */
+.hero__name::after {
+  content: '\00a0'; /* Non-breaking space - but we'll handle this in the component */
 }
 
 .hero__subtitle {
@@ -367,9 +441,10 @@ html {
   margin: 0.5rem 0 2rem 0;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
               inset 0 1px 0 rgba(250, 248, 240, 0.1);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   overflow: hidden;
+  will-change: transform, box-shadow, border-color;
 }
 
 .hero__stats::before {
@@ -381,7 +456,7 @@ html {
   animation: gradient-shift 4s ease infinite;
   border-radius: 24px;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.35s cubic-bezier(0.23, 1, 0.32, 1);
   z-index: -1;
 }
 
@@ -407,9 +482,11 @@ html {
   font-size: clamp(24px, 2.5vw, 36px);
   margin-bottom: 6px;
   background: linear-gradient(135deg, var(--gold-light) 0%, var(--cream) 100%);
+  background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  will-change: background-position;
 }
 
 .hero__stat-label {
@@ -456,9 +533,10 @@ html {
   text-decoration: none;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3),
               inset 0 1px 0 rgba(250, 248, 240, 0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   overflow: hidden;
+  will-change: transform, box-shadow, border-color;
 }
 
 .hero__dots .social::before {
@@ -467,7 +545,7 @@ html {
   inset: 0;
   background: linear-gradient(135deg, var(--gold-20) 0%, var(--olive-20) 100%);
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .hero__dots .social::after {
@@ -480,7 +558,7 @@ html {
   background: rgba(212, 175, 55, 0.3);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
+  transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1), height 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .hero__dots .social:hover::before {
@@ -507,7 +585,7 @@ html {
   fill: currentColor;
   position: relative;
   z-index: 1;
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .hero__dots .social:hover svg {
@@ -528,12 +606,11 @@ html {
   width: min(clamp(500px, 52vw, 800px), 90vw);
   aspect-ratio: 3 / 4;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
 }
 
-.photo-stack:hover {
-  transform: rotateY(8deg) rotateX(-3deg) scale(1.02);
-}
+/* Removed hover state - now controlled by mouse movement */
 
 /* Background glow layer */
 .photo-stack::before {
@@ -545,6 +622,7 @@ html {
   animation: glow-pulse 4s ease-in-out infinite;
   border-radius: 32px;
   filter: blur(40px);
+  will-change: box-shadow;
 }
 
 /* Frame layer - directly on photo now */
@@ -560,7 +638,8 @@ html {
     inset 0 2px 0 rgba(250, 248, 240, 0.1),
     inset 0 0 60px rgba(212, 175, 55, 0.1);
   border: 2px solid var(--gold-20);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: box-shadow, border-color;
 }
 
 .photo-stack:hover::after {
@@ -581,8 +660,9 @@ html {
   object-fit: cover;
   display: block;
   border-radius: 16px;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   filter: brightness(1.05) contrast(1.08) saturate(1.1);
+  will-change: transform, filter;
 }
 
 .photo-stack:hover .photo-stack__img {
@@ -590,7 +670,245 @@ html {
   filter: brightness(1.08) contrast(1.12) saturate(1.15);
 }
 
-/* ---------- Footer ---------- */
+/* ---------- Contact Section ---------- */
+.contact {
+  padding: clamp(60px, 12vh, 120px) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--gold-20) 0%, transparent 70%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.contact__inner {
+  max-width: var(--container-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  position: relative;
+  z-index: 1;
+}
+
+.contact__header {
+  text-align: center;
+  margin-bottom: clamp(40px, 8vh, 80px);
+}
+
+.contact__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 800;
+  font-size: clamp(36px, 6vw, 64px);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--gold-light) 50%, var(--cream) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 8s linear infinite;
+}
+
+.contact__subtitle {
+  font-size: clamp(16px, 1.4vw, 20px);
+  color: var(--cream-80);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact__content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.contact__form {
+  background: linear-gradient(135deg, var(--dark-80) 0%, var(--olive-deep) 100%);
+  backdrop-filter: blur(20px);
+  border: none;
+  border-radius: 24px;
+  padding: clamp(32px, 5vw, 48px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+              inset 0 0 0 2px var(--gold-20),
+              inset 0 1px 0 rgba(250, 248, 240, 0.1);
+}
+
+.contact__field {
+  margin-bottom: clamp(20px, 3vh, 28px);
+  position: relative;
+  border: none;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.contact__field::before,
+.contact__field::after {
+  display: none;
+}
+
+.contact__label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--gold-light);
+  font-size: clamp(14px, 1.2vw, 16px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+
+.contact__label::before,
+.contact__label::after {
+  display: none;
+}
+
+.contact__input,
+.contact__textarea {
+  width: 100%;
+  padding: 14px 20px;
+  background: rgba(13, 27, 14, 0.6);
+  border: none;
+  border-radius: 12px;
+  color: var(--cream);
+  font-family: inherit;
+  font-size: clamp(14px, 1.2vw, 16px);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--olive-20);
+  display: block;
+  margin: 0;
+}
+
+.contact__input::before,
+.contact__input::after,
+.contact__textarea::before,
+.contact__textarea::after {
+  display: none;
+}
+
+.contact__input::placeholder,
+.contact__textarea::placeholder {
+  color: var(--cream-60);
+}
+
+.contact__input:focus,
+.contact__textarea:focus {
+  background: rgba(13, 27, 14, 0.8);
+  box-shadow: inset 0 0 0 2px var(--gold),
+              0 0 0 4px var(--gold-20),
+              0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.contact__textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.contact__submit {
+  width: 100%;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  border: none;
+  border-radius: 12px;
+  color: var(--dark);
+  font-weight: 700;
+  font-size: clamp(14px, 1.2vw, 16px);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 30px var(--gold-30),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact__submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.contact__submit::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease;
+}
+
+.contact__submit:hover::before {
+  opacity: 1;
+}
+
+.contact__submit:hover::after {
+  width: 400px;
+  height: 400px;
+}
+
+.contact__submit:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 12px 40px var(--gold-30),
+              0 0 60px var(--gold-20),
+              inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.contact__submit:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.contact__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact__submit span {
+  position: relative;
+  z-index: 1;
+}
+
+.contact__success {
+  margin-top: 20px;
+  padding: 16px 24px;
+  background: rgba(90, 107, 79, 0.2);
+  border: 2px solid var(--gold-30);
+  border-radius: 12px;
+  color: var(--gold-light);
+  text-align: center;
+  font-weight: 600;
+  animation: fade-in-up 0.5s ease;
+}
+
+.contact__error {
+  margin-top: 20px;
+  padding: 16px 24px;
+  background: rgba(180, 50, 50, 0.2);
+  border: 2px solid rgba(255, 100, 100, 0.3);
+  border-radius: 12px;
+  color: #ffcccc;
+  text-align: center;
+  font-weight: 600;
+  animation: fade-in-up 0.5s ease;
+}
 .footer {
   flex-shrink: 0;
   border-top: 1px solid var(--gold-20);

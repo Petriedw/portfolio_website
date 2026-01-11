@@ -1,6 +1,7 @@
 // src/App.jsx
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
 export default function App() {
@@ -9,7 +10,7 @@ export default function App() {
       <Header />
       <main>
         <Hero />
-        
+        <Contact />
       </main>
       <Footer />
     </>
