@@ -1,14 +1,155 @@
-# React + Vite
+# Personal Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive personal website showcasing my profile, skills, projects, and contact information. This site serves as my digital portfolio and online presence.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Live Demo
 
-## Expanding the ESLint configuration
+> (https://petriedewit.dev/)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+https://yourdomain.com
+```
 
-## This README is left at default as this is still a work in progress
+---
+
+## 📌 Features
+
+* Responsive design (desktop, tablet, mobile)
+* Clean and modern UI
+* About Me section
+* Projects / Portfolio showcase
+* Skills and technologies overview
+* Contact form or contact information
+* SEO-friendly structure
+* Fast loading and optimized assets
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend:**
+
+* HTML5
+* CSS3 / SCSS / Tailwind (adjust as needed)
+* JavaScript (Vanilla / Framework if applicable)
+
+**Backend (if applicable):**
+
+* Node.js / Flask / Django / PHP
+
+**Other Tools:**
+
+* Git & GitHub
+* VS Code
+* Deployment: Netlify / Vercel / GitHub Pages / Dedicated Server
+
+---
+
+## 📂 Project Structure
+
+```
+.
+├── assets/            # Images, icons, fonts
+├── css/               # Stylesheets
+├── js/                # JavaScript files
+├── index.html         # Main landing page
+├── README.md          # Project documentation
+└── ...
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+* Git
+* A modern web browser
+* (Optional) Node.js / Python if backend features are used
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/your-repo-name.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd your-repo-name
+```
+
+3. Open the project:
+
+```bash
+# Simply open index.html in your browser
+```
+
+*or* use a local server:
+
+```bash
+python -m http.server
+```
+
+---
+
+## ✏️ Customization
+
+* Update **content** in `index.html`
+* Modify **styles** in the `css/` folder
+* Replace images in `assets/`
+* Update metadata (title, description) for SEO
+
+---
+
+## 📸 Screenshots
+
+> *Add screenshots of your website here*
+
+```
+![Homepage](assets/screenshot-home.png)
+```
+
+---
+
+## 📬 Contact
+
+Feel free to reach out:
+
+* Email: [yourname@email.com](mailto:yourname@email.com)
+* LinkedIn: [https://linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+* GitHub: [https://github.com/yourusername](https://github.com/yourusername)
+
+---
+
+## 🧠 Future Improvements
+
+* Add blog section
+* Dark/light mode toggle
+* CMS integration
+* Performance optimizations
+* Accessibility improvements
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## ⭐ Acknowledgements
+
+* Inspiration from modern portfolio designs
+* Icons from Font Awesome / Lucide
+* Fonts from Google Fonts
+
+---
+
+> If you like this project, consider giving it a ⭐ on GitHub!
