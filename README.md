@@ -6,10 +6,8 @@ A modern, responsive personal website showcasing my profile, skills, projects, a
 
 ## 🌐 Live Demo
 
-> (https://petriedewit.dev/)
-
 ```
-https://yourdomain.com
+https://petriedewit.dev/
 ```
 
 ---
