@@ -71,7 +71,7 @@ export default function Hero() {
             </a>
             <a 
               className="social" 
-              href="/Petrie.pdf" 
+              href="/Petrie_deWit_CV.pdf" 
               download="Petrie-De-Wit-CV.pdf" 
               aria-label="Download CV"
             >
