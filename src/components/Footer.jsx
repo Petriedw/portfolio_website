@@ -1,0 +1,1 @@
+export default function Footer() { return <footer className="footer"><div className="container footer__inner"><span>© {new Date().getFullYear()} Petrie De Wit</span><span>Built with curiosity in Stellenbosch</span><a href="#top">Back to top ↑</a></div></footer>; }
